@@ -21,6 +21,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - name: run update_hashes.sh
+        run: update_hashes.sh
+
       - name: Get hash of source files
         run: echo "SOURCE_HASH=$(echo '${{ hashFiles('**/*') }}')" >> $GITHUB_ENV
 

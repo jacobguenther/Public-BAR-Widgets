@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Get hash of source files
-        run: echo "SOURCE_HASH=$(echo '${{ hashFiles('*') }}')" >> $GITHUB_ENV
+        run: echo "SOURCE_HASH=$(echo '${{ hashFiles('**/*') }}')" >> $GITHUB_ENV
 
       - name: Write hash to file
         run: echo "Source files hash ${{ env.SOURCE_HASH }}" > hashes.txt

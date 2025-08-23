@@ -25,7 +25,7 @@ jobs:
         run: echo "SOURCE_HASH=$(echo '${{ hashFiles('*') }}')" >> $GITHUB_ENV
 
       - name: Write hash to file
-        run: echo "Source files hash: ${{ env.SOURCE_HASH }}" > hashes.txt
+        run: echo "Source files hash ${{ env.SOURCE_HASH }}" > hashes.txt
 
       - name: Commit hash file
         uses: stefanzweifel/git-auto-commit-action@v6

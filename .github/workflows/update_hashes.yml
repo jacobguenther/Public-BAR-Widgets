@@ -35,8 +35,8 @@ jobs:
       #- name: Write hash to file
       #  run: echo "Source files hash ${{ env.SOURCE_HASH }}" > hashes.txt
 
-      #- name: Commit hash file
-      #  uses: stefanzweifel/git-auto-commit-action@v6
-      #  with:
-      #    commit_message: "Update source file hash via Github Actions"
-      #    file_pattern: "hashes.txt"
+      - name: Commit hash file
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "Update source file hash via Github Actions"
+          file_pattern: "hashes.txt"

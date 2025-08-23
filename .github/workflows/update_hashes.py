@@ -40,7 +40,8 @@ def hash_files_recursive(dir_path):
 
 print("start")
 
-for file_or_dir in os.listdir():
+for file_or_dir in os.listdir(current_directory):
+	print(file_or_dir)
 	if file_or_dir in ignore_list:
 		continue
 	hash_files_recursive(file_or_dir)

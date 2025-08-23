@@ -17,6 +17,9 @@ jobs:
         with:
           submodules: 'true'
 
+      - name: Update submodules to latest remote
+        run: git submodule update --init --recursive --remote
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:

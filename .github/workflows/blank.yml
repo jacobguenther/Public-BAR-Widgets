@@ -21,26 +21,14 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
       - name: Get hash of source files
         run: echo "SOURCE_HASH=$(echo '${{ hashFiles('*') }}')" >> $GITHUB_ENV
 
       - name: Write hash to file
-        run: |
-          touch source_hash.txt
-          echo "Source files hash: ${{ env.SOURCE_HASH }}" > source_hash.txt
+        run: echo "Source files hash: ${{ env.SOURCE_HASH }}" > hashes.txt
 
       - name: Commit hash file
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "Update source file hash"
-          file_pattern: "source_hash.txt"
+          commit_message: "Update source file hash via Github Actions"
+          file_pattern: "hashes.txt"

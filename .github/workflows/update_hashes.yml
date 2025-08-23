@@ -1,24 +1,17 @@
 name: update hashes
 
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "update_hashes"
   update_hashes:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -31,12 +24,6 @@ jobs:
 
       - name: run update_hashes.py
         run: .github/workflows/update_hashes.py
-
-      #- name: Get hash of source files
-      #  run: echo "SOURCE_HASH=$(echo '${{ hashFiles('**/*') }}')" >> $GITHUB_ENV
-
-      #- name: Write hash to file
-      #  run: echo "Source files hash ${{ env.SOURCE_HASH }}" > hashes.txt
 
       - name: Commit hash file
         uses: stefanzweifel/git-auto-commit-action@v6

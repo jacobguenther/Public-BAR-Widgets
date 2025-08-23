@@ -22,8 +22,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: run update_hashes.sh
-        run: echo $PWD
-        #update_hashes.sh
+        run: .github/workflows/update_hashes.sh
 
       - name: Get hash of source files
         run: echo "SOURCE_HASH=$(echo '${{ hashFiles('**/*') }}')" >> $GITHUB_ENV

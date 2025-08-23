@@ -14,7 +14,7 @@ def hash(data_str):
 	return hex_digest
 
 print("dirs")
-for dirs in os.listdir():
+for dir in os.listdir():
 	# print(subdirs, dirs, files)
 	# print("subdirs", subdirs)
 	# for subdir in subdirs:

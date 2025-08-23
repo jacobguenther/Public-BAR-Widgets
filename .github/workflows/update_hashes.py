@@ -5,7 +5,7 @@ from hashlib import sha256
 
 current_directory = os.getcwd()
 
-ignore_dirs = [".git", ".github"]
+ignore_list = [".git", ".github", ".gitmodules", "hashes.txt", "README.md"]
 
 def hash(data_str):
 	data_bytes = data_str.encode('utf-8')
@@ -13,18 +13,14 @@ def hash(data_str):
 	hex_digest = sha256_hash_object.hexdigest()
 	return hex_digest
 
-print("dirs")
-for dir in os.listdir():
-	# print(subdirs, dirs, files)
-	# print("subdirs", subdirs)
-	# for subdir in subdirs:
-	# 	print(subdir)
+hashes = []
 
-	if dir in ignore_dirs:
+def hash_files_recursive(path):
+	print(path, hash(path))
+
+print("dirs")
+for file_or_dir in os.listdir():
+	if file_or_dir in ignore_list:
 		print("ignored", dir)
 		continue
-	print(dir, hash(dir))
-
-	# print("files")
-	# for file in files:
-	# 	print(file)
+	hash_files_recursive(current_directory+"/"+file_or_dir)

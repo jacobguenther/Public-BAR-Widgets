@@ -47,10 +47,10 @@ for file_or_dir in os.listdir(current_directory):
 	hash_files_recursive(file_or_dir)
 
 # clear hashes.txt of contents
-open("hashes.txt", "w").close()
+open(current_directory+"/"+"hashes.txt", "w").close()
 
 # append all the hashes
-with open("hashes.txt", "a") as f:
+with open(current_directory+"/"+"hashes.txt", "a") as f:
 	for file_hash, file_path in hashes:
 		f.write(file_hash+" "+file_path+"\n")
 		print(file_hash, file_path)

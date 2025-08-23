@@ -28,14 +28,17 @@ def hash_files_recursive(dir_path):
 		current_path = current_directory + "/" + local_path
 
 		if os.path.isfile(current_path):
+			print("file", current_path)
 			file_contents = read_file(current_path)
 			if file_contents:
 				file_hash = hash(file_contents)
 				hashes.append((file_hash, local_path))
 
 		if os.path.isdir(current_path):
+			print("dir", current_path)
 			hash_files_recursive(local_path)
 
+print("start")
 
 for file_or_dir in os.listdir():
 	if file_or_dir in ignore_list:

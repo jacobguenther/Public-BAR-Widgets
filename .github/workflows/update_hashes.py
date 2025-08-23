@@ -23,9 +23,13 @@ def read_file(path):
 		pass
 
 def hash_files_recursive(dir_path):
+	print("hash_files_recursive", dir_path)
+
 	for file_or_dir in os.listdir(current_directory + "/" + dir_path):
 		local_path = dir_path + "/" + file_or_dir
 		current_path = current_directory + "/" + local_path
+
+		print(current_path)
 
 		if os.path.isfile(current_path):
 			print("file", current_path)

@@ -32,7 +32,7 @@ jobs:
           echo test, and deploy your project.
 
       - name: Get hash of source files
-        run: echo "SOURCE_HASH=$(echo '${{ hashFiles('**/*') }}')" >> $GITHUB_ENV
+        run: echo "SOURCE_HASH=$(echo '${{ hashFiles('*') }}')" >> $GITHUB_ENV
 
       - name: Write hash to file
         run: |

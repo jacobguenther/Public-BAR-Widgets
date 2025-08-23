@@ -13,15 +13,16 @@ def hash(data_str):
 	hex_digest = sha256_hash_object.hexdigest()
 	return hex_digest
 
-for subdirs, dirs, files in os.walk(current_directory):
+for dirs in os.listdir():
 	# print(subdirs, dirs, files)
-	# print("subdirs")
+	# print("subdirs", subdirs)
 	# for subdir in subdirs:
 	# 	print(subdir)
 
 	print("dirs")
 	for dir in dirs:
 		if dir in ignore_dirs:
+			print("ignored", dir)
 			continue
 		print(dir, hash(dir))
 

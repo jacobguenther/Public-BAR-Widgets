@@ -49,7 +49,7 @@ def main():
 	ignore_list = [".git", ".github", ".gitignore"]
 	widget_directory = "Widgets/"
 	widget_hashes = hash_files(widget_directory, ignore_list)
-	write_hashes("hashes.txt", widget_hashes)
+	write_hashes("widget_hashes.txt", widget_hashes)
 
 if __name__ == "__main__":
 	main()

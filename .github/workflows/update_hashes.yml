@@ -38,4 +38,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Update source file hashes via Github Actions"
-          file_pattern: "hashes.txt"
+          file_pattern: "widget_hashes.txt"

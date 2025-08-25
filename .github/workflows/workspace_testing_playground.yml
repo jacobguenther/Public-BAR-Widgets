@@ -24,7 +24,7 @@ jobs:
           cache: 'pip'
 
       - name: install python dependencies
-        run: python3 -m pip install -r .github/workflows/requirements.txpip
+        run: python3 -m pip install -r .github/workflows/requirements.txt
 
       - name: run validate_metadata.py
         run: .github/workflows/validate_metadata.py

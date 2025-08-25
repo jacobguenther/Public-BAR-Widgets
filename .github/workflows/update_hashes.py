@@ -3,9 +3,6 @@
 import os
 import hashlib
 
-hashes = []
-ignore_list = [".git", ".github", ".gitignore"]
-
 def hash(data_str):
 	data_bytes = data_str.encode('utf-8')
 	sha256_hash_object = hashlib.sha256(data_bytes)
@@ -21,7 +18,7 @@ def read_file(path):
 	except Exception as e:
 		pass
 
-def hash_files_recursive(dir_path):
+def hash_files_recursive(hashes, dir_path, ignore_list):
 	for file_or_dir in os.listdir(dir_path):
 		current_path = dir_path + "/" + file_or_dir
 
@@ -32,19 +29,27 @@ def hash_files_recursive(dir_path):
 				hashes.append((file_hash, current_path))
 
 		if os.path.isdir(current_path) and file_or_dir not in ignore_list:
-			hash_files_recursive(current_path)
+			hash_files_recursive(hashes, current_path, ignore_list)
 
-def hash_files():
-	current_directory = os.getcwd()
-	for file_or_dir in os.listdir(current_directory):
-		if os.path.isdir(file_or_dir) and file_or_dir not in ignore_list:
-			hash_files_recursive(file_or_dir)
+def hash_files(directory, ignore_list):
+	hashes = []
+	for file_or_dir in os.listdir(directory):
+		hash_files_recursive(hashes, directory+file_or_dir, ignore_list)
+	return hashes
 
-def write_hashes():
-	open("hashes.txt", "w").close()
-	with open("hashes.txt", "a") as f:
+def write_hashes(file_path, hashes):
+	# clear old hashes
+	open(file_path, "w").close()
+	with open(file_path, "a") as f:
 		for file_hash, file_path in hashes:
 			f.write(file_hash+" "+file_path+"\n")
 
-hash_files()
-write_hashes()
+def main():
+	# Files in widgets that are ignored
+	ignore_list = [".git", ".github", ".gitignore"]
+	widget_directory = "Widgets/"
+	widget_hashes = hash_files(widget_directory, ignore_list)
+	write_hashes("hashes.txt", widget_hashes)
+
+if __name__ == "__main__":
+	main()

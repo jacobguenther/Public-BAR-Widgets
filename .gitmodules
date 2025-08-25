@@ -1,6 +1,6 @@
 [submodule "RecoilOceanWaves"]
-	path = RecoilOceanWaves
+	path = Widgets/RecoilOceanWaves
 	url = https://github.com/jacobguenther/RecoilOceanWaves
 [submodule "BAR-Widgets"]
-	path = BAR-Widgets
+	path = Widgets/BAR-Widgets
 	url = https://github.com/WybrenKoelmans/BAR-Widgets

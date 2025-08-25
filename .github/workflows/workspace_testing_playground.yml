@@ -1,0 +1,26 @@
+name: workspace testing playground
+on:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # Allows running from the github UI.
+  workflow_dispatch:
+
+jobs:
+  update_hashes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: run validate_metadata.py
+        run: .github/workflows/validate_metadata.py

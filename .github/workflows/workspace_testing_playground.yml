@@ -21,6 +21,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+          cache: 'pip'
+
+      - name: install python dependencies
+        run: pip install jsonschema
 
       - name: run validate_metadata.py
         run: .github/workflows/validate_metadata.py

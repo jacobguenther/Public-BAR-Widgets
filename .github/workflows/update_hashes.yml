@@ -6,10 +6,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+  # Allows running from the github UI.
   workflow_dispatch:
 
 jobs:
   update_hashes:
+    # Only run this job if a change is pushed directly or a PR is merged.
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -17,6 +20,7 @@ jobs:
         with:
           submodules: 'true'
 
+      # This updates all submodules and is probably not what we want.
       - name: Update submodules to latest remote
         run: git submodule update --init --recursive --remote
 
@@ -25,9 +29,11 @@ jobs:
         with:
           python-version: '3.9'
 
+      # Currently this deletes the old hash file and builds a new one.
       - name: run update_hashes.py
         run: .github/workflows/update_hashes.py
 
+      # Commit the new hash file.
       - name: Commit hash file
         uses: stefanzweifel/git-auto-commit-action@v6
         with:

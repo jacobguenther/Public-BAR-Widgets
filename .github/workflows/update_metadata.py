@@ -44,8 +44,8 @@ def parse_submodules(submodules_source):
 				"url": url,
 			}
 	return submodules
-def parse_submodule_status(submoules, result):
-	lines = result.stdout.splitlines()
+def parse_submodule_status(submoules, cmd_output):
+	lines = cmd_output.splitlines()
 	for line in lines:
 		parts = line.strip().split()
 		if len(parts) >= 2:
@@ -89,11 +89,8 @@ def main():
 		raise Exception(message)
 	
 	submodules = parse_submodules(submodules_source)
-
 	result = subprocess.run(["git", "submodule", "status"], capture_output=True, text=True, check=True)
-	parse_submodule_status(submodules, result)
-
-	print(submodules)
+	parse_submodule_status(submodules, result.stdout)
 
 	seen_display_names = set() # 2 entries can not have the same display name
 	seen_submodule_paths = {} # Could 2 entries use the same repo?

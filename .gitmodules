@@ -1,6 +1,3 @@
 [submodule "RecoilOceanWaves"]
 	path = Widgets/RecoilOceanWaves
 	url = https://github.com/jacobguenther/RecoilOceanWaves
-[submodule "BAR-Widgets"]
-	path = Widgets/BAR-Widgets
-	url = https://github.com/WybrenKoelmans/BAR-Widgets

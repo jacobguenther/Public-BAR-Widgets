@@ -20,10 +20,6 @@ jobs:
         with:
           submodules: 'true'
 
-      # This updates all submodules and is probably not what we want.
-      - name: Update submodules to latest remote
-        run: git submodule update --init --recursive --remote
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:

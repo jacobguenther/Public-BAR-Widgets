@@ -1,7 +1,5 @@
-name: on_merge
+name: on_pr
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
     types: [opened, synchronize, reopened]
@@ -10,11 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  on_merge:
-    # Only run this job if it was triggered by the github UI, a change was pushed directly, or a PR was merged.
-    # if: |
-    #    github.event_name == 'workflow_dispatch' ||
-    #    (github.event_name == 'pull_request' && github.event.pull_request.edite == true)
+  on_pr:
+    # Only run this job if it was triggered by the github UI, or a PR was made/changed but not when it is merged.
+    if: |
+       github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'pull_request' && github.event.pull_request.merged != true)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

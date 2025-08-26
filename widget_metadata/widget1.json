@@ -1,0 +1,8 @@
+{
+	"display_name": "widget 1",
+	"author": "chmod777 tester",
+	"submodule_path": "Widgets/widget1",
+	"discord_link": "",
+	"description": "A short description",
+	"entry_point": "/"
+}

@@ -1,5 +1,15 @@
 [
 	{
+		"display_name": "widget 1",
+		"author": "chmod777 tester",
+		"submodule_path": "Widgets/widget1",
+		"discord_link": "",
+		"description": "A short description",
+		"entry_point": "/",
+		"github_link": "https://github.com/chmod777-tester/widget1",
+		"githash": "10ba8a1f052fbc5bf13dc2eadef9b7a025e52091"
+	},
+	{
 		"display_name": "Ocean Waves",
 		"author": "chmod777",
 		"submodule_path": "Widgets/RecoilOceanWaves",

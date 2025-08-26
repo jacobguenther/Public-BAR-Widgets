@@ -38,9 +38,7 @@ def hash_files(directory, ignore_list):
 	return hashes
 
 def write_hashes(file_path, hashes):
-	# clear old hashes
-	open(file_path, "w").close()
-	with open(file_path, "a") as f:
+	with open(file_path, "w") as f:
 		for file_hash, file_path in hashes:
 			f.write(file_hash+" "+file_path+"\n")
 

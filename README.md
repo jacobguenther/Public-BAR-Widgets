@@ -1,8 +1,8 @@
 # So You Want to Add a Widget to the Hub
 
+## Steps
 Make sure you replace all text in the angle brackets <>.
 
-## Steps
 * Fork this repository
 
 TODO: Add image here

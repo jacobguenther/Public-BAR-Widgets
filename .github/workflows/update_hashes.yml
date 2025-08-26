@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Install Python Dependencies
+        run: python3 -m pip install -r .github/workflows/requirements.txt
+
       # Currently this deletes the old hash file and builds a new one.
       - name: run update_hashes.py
         run: .github/workflows/update_hashes.py

@@ -1,10 +1,11 @@
 [
 	{
-		"display_name": "Recoil Ocean Waves",
+		"display_name": "Ocean Waves",
 		"author": "chmod777",
-		"path": "Widgets/RecoilOceanWaves",
+		"submodule_path": "Widgets/RecoilOceanWaves",
 		"github_link": "https://github.com/jacobguenther/RecoilOceanWaves",
 		"discord_link": "https://discord.com/channels/549281623154229250/1387909127233339482",
-		"description": "A new water renderer for BAR."
+		"description": "A new water renderer for BAR.",
+		"entry_point": "/oceanwaves"
 	}
 ]

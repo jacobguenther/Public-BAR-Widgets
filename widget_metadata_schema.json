@@ -1,39 +1,46 @@
 {
-	"type": "array",
-	"items": {
-		"type": "object",
-		"properties": {
-			"display_name": {
-				"type": "string",
-				"description": "The name of the widget."
-			},
-			"author": {
-				"type": "string",
-				"description": "The name of the widget author."
-			},
-
-			"path": {
-				"type": "string",
-				"description": "The name of the widget."
-			},
-
-			"github_link": {
-				"type": "string",
-				"format": "uri",
-				"description": "A URL to the widgets's GitHub repository."
-			},
-			"discord_link": {
-				"type": "string",
-				"format": "uri",
-				"description": "A URL to the Discord post related to the widget."
-			},
-
-			"description": {
-				"type": "string",
-				"description": "A short description of the widget."
-			}
+	"type": "object",
+	"properties": {
+		"display_name": {
+			"type": "string",
+			"description": "The name of the widget."
 		},
-		"required": ["display_name", "author", "path", "github_link", "discord_link", "description"],
-		"additionalProperties": false
-	}
+		"author": {
+			"type": "string",
+			"description": "The name of the widget author."
+		},
+
+		"submodule_path": {
+			"type": "string",
+			"description": "The name of the widget."
+		},
+
+		"github_link": {
+			"type": "string",
+			"format": "uri",
+			"description": "A URL to the widgets's GitHub repository."
+		},
+		"discord_link": {
+			"type": "string",
+			"format": "uri",
+			"description": "A URL to the Discord post related to the widget."
+		},
+
+		"description": {
+			"type": "string",
+			"description": "A short description of the widget."
+		},
+
+		"cover_image_path": {
+			"type": "string",
+			"description": "Path to the widgets cover image that will be displayed on its card: \"widget_cover_images/<your_widget_name.png>\""
+		},
+
+		"entry_point": {
+			"type": "string",
+			"description": "Path to either a .lua file or a folder in your repository."
+		}
+	},
+	"required": ["display_name", "author", "submodule_path", "github_link", "discord_link", "description"],
+	"additionalProperties": false
 }

@@ -1,3 +1,6 @@
 [submodule "RecoilOceanWaves"]
 	path = Widgets/RecoilOceanWaves
 	url = https://github.com/jacobguenther/RecoilOceanWaves
+[submodule "Widgets/widget1"]
+	path = Widgets/widget1
+	url = https://github.com/chmod777-tester/widget1

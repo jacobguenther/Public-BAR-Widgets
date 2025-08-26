@@ -1,5 +1,4 @@
-name: update hashes
-
+name: workspace testing playground
 on:
   push:
     branches: [ "main" ]
@@ -10,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update_hashes:
+  on_merge:
     # Only run this job if it was triggered by the github UI, a change was pushed directly, or a PR was merged.
     if: |
        github.event_name == 'workflow_dispatch' ||
@@ -18,7 +17,7 @@ jobs:
        (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           submodules: 'true'
@@ -27,17 +26,27 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+          cache: 'pip'
 
       - name: Install Python Dependencies
         run: python3 -m pip install -r .github/workflows/requirements.txt
 
-      # Currently this deletes the old hash file and builds a new one.
-      - name: run update_hashes.py
+      - name: Run update_metadata.py
+        run: .github/workflows/update_metadata.py
+
+      - name: Run update_hashes.py
         run: .github/workflows/update_hashes.py
 
-      # Commit the new hash file.
+      # Commit the new hashes file.
       - name: Commit hash file
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "Update source file hashes via Github Actions"
+          commit_message: "Update widget_hashes.txt via Github Actions"
           file_pattern: "widget_hashes.txt"
+
+      # Commit the new metadata file.
+      - name: Commit metadata file
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "Update widget_metadata.json via Github Actions"
+          file_pattern: "widget_metadata.json"

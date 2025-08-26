@@ -1,0 +1,35 @@
+name: on_merge
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened]
+
+  # Allows running from the github UI.
+  workflow_dispatch:
+
+jobs:
+  on_merge:
+    # Only run this job if it was triggered by the github UI, a change was pushed directly, or a PR was merged.
+    # if: |
+    #    github.event_name == 'workflow_dispatch' ||
+    #    (github.event_name == 'pull_request' && github.event.pull_request.edite == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install Python Dependencies
+        run: python3 -m pip install -r .github/workflows/requirements.txt
+
+      - name: Run update_metadata.py
+        run: .github/workflows/update_metadata.py validate-only

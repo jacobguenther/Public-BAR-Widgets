@@ -40,8 +40,21 @@ def parse_submodules(submodules_source):
 			name = section.split('"')[1]
 			path = parser.get(section, "path")
 			url = parser.get(section, "url")
-			submodules[path] = url
+			submodules[path] = {
+				"url": url,
+			}
 	return submodules
+def parse_submodule_status(submoules, result):
+	lines = result.stdout.splitlines()
+	for line in lines:
+		parts = line.strip().split()
+		if len(parts) >= 2:
+			githash = parts[0].lstrip('-+') # also removes whitespace
+			path = parts[1]
+			if path in submoules:
+				submoules[path]["githash"] = githash
+			else:
+				raise Exception(f"Submodule path {path} found in status but not in .gitmodules")
 
 def main():
 	widget_metadata_schema_src, message = read_file("widget_metadata_schema.json")
@@ -76,11 +89,11 @@ def main():
 		raise Exception(message)
 	
 	submodules = parse_submodules(submodules_source)
-	print(submodules)
 
 	result = subprocess.run(["git", "submodule", "status"], capture_output=True, text=True, check=True)
-	print("Command output:")
-	print(result.stdout)
+	parse_submodule_status(submodules, result)
+
+	print(submodules)
 
 	seen_display_names = set() # 2 entries can not have the same display name
 	seen_submodule_paths = {} # Could 2 entries use the same repo?
@@ -89,7 +102,6 @@ def main():
 		display_name = entry.get("display_name")
 		submodule_path = entry.get("submodule_path")
 		cover_image_path = entry.get("cover_image_path")
-		github_link = entry.get("github_link")
 		# discord_link = entry.get("discord_link")
 
 		if display_name in seen_display_names:
@@ -100,18 +112,9 @@ def main():
 		if not os.path.isdir(submodule_path):
 			raise Exception(f"missing folder: {submodule_path} for {display_name}")
 		
-		if submodule_path not in submodules:
-			raise Exception(f"metadata submodule path \"{submodule_path}\" not found in .gitmodules for {display_name}")
-		gitmodule_url = submodules.get(submodule_path)
-		if github_link != gitmodule_url:
-			raise Exception(f"metadata github link \"{github_link}\" does not match .gitmodule url \"{gitmodule_url}\" for {display_name}")
-		
-		# module_head_path = ".git/modules/"+submodule_path.split("/", 1)[1]+"/HEAD"
-		# print(module_head_path)
-		# module_githash, message = read_file(module_head_path)
-		# if not module_githash:
-		# 	raise Exception(message)
-		# Do we add this to the metadata?
+		if submodule_path in submodules:
+			entry["github_link"] = submodules.get(submodule_path).get("url")
+			entry["githash"] = submodules.get(submodule_path).get("githash")
 
 		if cover_image_path:
 			if cover_image_path in seen_cover_image_paths:
@@ -125,9 +128,9 @@ def main():
 		seen_submodule_paths[submodule_path] = display_name
 		seen_cover_image_paths[cover_image_path] = display_name
 
-	# for submodule_path in submodules:
-	# 	if submodule_path not in seen_submodule_paths:
-	# 		raise Exception(f"orphaned submodule {submodule_path}")
+	for submodule_path in submodules:
+		if submodule_path not in seen_submodule_paths:
+			raise Exception(f"orphaned submodule {submodule_path}")
 	
 	if "validate-only" not in sys.argv[1:]:
 		with open("widget_metadata.json", "w") as f:

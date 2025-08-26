@@ -15,11 +15,6 @@
 			"description": "The name of the widget."
 		},
 
-		"github_link": {
-			"type": "string",
-			"format": "uri",
-			"description": "A URL to the widgets's GitHub repository."
-		},
 		"discord_link": {
 			"type": "string",
 			"format": "uri",
@@ -41,6 +36,6 @@
 			"description": "Path to either a .lua file or a folder in your repository."
 		}
 	},
-	"required": ["display_name", "author", "submodule_path", "github_link", "discord_link", "description"],
+	"required": ["display_name", "author", "submodule_path", "discord_link", "description"],
 	"additionalProperties": false
 }

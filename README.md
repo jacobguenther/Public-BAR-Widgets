@@ -4,6 +4,9 @@ Make sure you replace all text in the angle brackets <>.
 
 ## Steps
 * Fork this repository
+
+TODO: Add image here
+
 * Clone your fork
 ```
 git clone https://github.com/<your_user_name>/Public-BAR-Widgets
@@ -36,7 +39,9 @@ git commit -m "Add <your_widget_name> to the widget hub."
 git push
 ```
 
-* In github click `create Pull Request`
+* On your forks github page click `contribute` -> `open pull request`
+
+TODO: Add image here
 
 ## Notes on the metadata format
 TODO

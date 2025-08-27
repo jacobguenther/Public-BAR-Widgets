@@ -19,23 +19,6 @@ jobs:
         run: |
           docker compose run --rm builder
 
-      - name: Install rclone
-        run: |
-          curl https://rclone.org/install.sh | sudo bash
-
-      - name: Configure rclone for R2
-        run: |
-          mkdir -p ~/.config/rclone
-          cat > ~/.config/rclone/rclone.conf <<EOF
-          [r2]
-          type = s3
-          provider = Cloudflare
-          access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}
-          secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
-          region = auto
-          EOF
-
       - name: Sanity check before we accidentally nuke the bucket
         run: |
           if [ -z "$(ls -A build/)" ]; then
@@ -43,11 +26,20 @@ jobs:
             exit 1
           fi
 
-      - name: Sync build/ to Cloudflare R2 with rclone
-        run: |
-          rclone sync build/ r2:bar-workshop --delete-during --fast-list
+      - name: Upload build/ to Cloudflare R2
+        uses: ryand56/r2-upload-action@v1.4
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: build
+          destination-dir: /
+          keep-file-fresh: true
 
-  # Required secrets:
-  # - R2_ACCESS_KEY_ID
-  # - R2_SECRET_ACCESS_KEY
-  # - R2_ACCOUNT_ID
+      - name: Sanity check before we accidentally nuke the bucket
+        run: |
+          if [ -z "$(ls -A build/)" ]; then
+            echo "Build directory is empty, aborting."
+            exit 1
+          fi

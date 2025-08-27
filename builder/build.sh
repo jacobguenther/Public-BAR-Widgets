@@ -9,7 +9,7 @@ rm -rf build/*
 mkdir -p build/distributions build/sites
 
 # 1. Find all manifest.json files and merge them into manifests.json
-find Widgets -type f -name 'manifest.json' -print0 | xargs -0 jq -s 'add' > build/manifests.json
+find Widgets -type f -name 'manifest.json' -print0 | xargs -0 jq -s 'map(if type == "array" then . else [.] end) | add' > build/manifests.json
 
 # 2. Create widget distribution packages and site data for each manifest.json found
 find Widgets -type f -name 'manifest.json' | while read -r manifest; do

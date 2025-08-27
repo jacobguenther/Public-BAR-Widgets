@@ -32,18 +32,22 @@ jobs:
             exit 1
           fi
 
+      - name: Update CA certificates and OpenSSL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates openssl
+
       - name: Install rclone
         run: |
-          curl https://rclone.org/install.sh | bash
+          curl https://rclone.org/install.sh | sudo bash
 
-      - name: Configure rclone for Cloudflare R2
+      - name: Configure rclone for R2
         run: |
           mkdir -p ~/.config/rclone
           cat > ~/.config/rclone/rclone.conf <<EOF
           [r2]
           type = s3
           provider = Cloudflare
-          env_auth = false
           access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}
           secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}
           endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com

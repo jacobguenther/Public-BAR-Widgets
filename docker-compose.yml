@@ -1,0 +1,11 @@
+services:
+  builder: # use: docker compose run --rm builder
+    container_name: bar-workshop-builder
+    image: bar-workshop-builder:latest
+    build:
+      context: .
+      dockerfile: builder/Dockerfile
+    volumes:
+      - ./build:/app/build
+      - ./Widgets:/app/Widgets
+    profiles: ['tool'] # we don't want to run this with docker compose up

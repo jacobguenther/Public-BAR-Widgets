@@ -1,5 +1,9 @@
 FROM ubuntu:latest
 
+LABEL org.opencontainers.image.source=https://github.com/WybrenKoelmans/Public-BAR-Widgets
+LABEL org.opencontainers.image.description="BAR Workshop builder"
+LABEL org.opencontainers.image.licenses="GPL-3.0"
+
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \

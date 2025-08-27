@@ -11,6 +11,12 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "push image",
+            "type": "shell",
+            "command": "docker push ghcr.io/wybrenkoelmans/bar-workshop-builder:latest",
+            "problemMatcher": []
         }
     ]
 }

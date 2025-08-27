@@ -1,7 +1,7 @@
 services:
   builder: # use: docker compose run --rm builder
     container_name: bar-workshop-builder
-    image: bar-workshop-builder:latest
+    image: ghcr.io/wybrenkoelmans/bar-workshop-builder:latest
     build:
       context: .
       dockerfile: builder/Dockerfile

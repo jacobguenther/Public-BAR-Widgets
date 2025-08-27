@@ -32,16 +32,27 @@ jobs:
             exit 1
           fi
 
-      - name: Upload build/ to Cloudflare R2
-        uses: ryand56/r2-upload-action@v1.4
-        with:
-          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
-          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: build
-          destination-dir: /
-          keep-file-fresh: true
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | bash
+
+      - name: Configure rclone for Cloudflare R2
+        run: |
+          mkdir -p ~/.config/rclone
+          cat > ~/.config/rclone/rclone.conf <<EOF
+          [r2]
+          type = s3
+          provider = Cloudflare
+          env_auth = false
+          access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          region = auto
+          EOF
+
+      - name: Upload build/ to Cloudflare R2 with rclone
+        run: |
+          rclone sync build r2:${{ secrets.R2_BUCKET }}/ --progress --fast-list
 
       - name: Sanity check before we accidentally nuke the bucket
         run: |

@@ -29,11 +29,11 @@ find Widgets -type f -name 'manifest.json' | while read -r manifest; do
     readme_file=$(find "$widget_dir" -maxdepth 2 -name "README.md" | head -n 1)
 
     if [ -f "$cover_image" ]; then
-        echo "  - Converting cover image..."
-        # Create a larger version of the cover image
-        convert "$cover_image" -resize 460x300\! "${site_dir}/${widget_name}_460x300.png"
-        # Create a smaller thumbnail version
-        convert "$cover_image" -resize 130x100\! "${site_dir}/${widget_name}_130x100.png"
+    echo "  - Converting cover image..."
+    # Create a larger version of the cover image, preserving aspect ratio and cropping as needed
+    convert "$cover_image" -resize 460x300^ -gravity center -extent 460x300 "${site_dir}/${widget_name}_460x300.png"
+    # Create a smaller thumbnail version, preserving aspect ratio and cropping as needed
+    convert "$cover_image" -resize 325x100^ -gravity center -extent 325x100 "${site_dir}/${widget_name}_325x100.png"
     else
         echo "  - WARNING: No cover.png found for $widget_name"
     fi

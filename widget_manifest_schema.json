@@ -5,6 +5,10 @@
 			"type": "string",
 			"description": "The unique identifier for the widget. This is usually the same as the repository name."
 		},
+		"mod_type": {
+			"type": "string",
+			"enum": ["widget", "misc"]
+		},
 
 		"display_name": {
 			"type": "string",
@@ -48,10 +52,22 @@
 			"$comment": "Optional"
 		},
 
-		"entrypoints": {
+		"entrypoint": {
 			"type": ["string"],
-			"description": "Path to either a .lua file or a folder in your repository.",
-			"$comment": "Optional: under development"
+			"description": "Path to either a .lua file or a folder in your repository relative to the manifest file. Default \"/\".",
+			"$comment": "Optional"
+		},
+		"install": {
+			"type": ["object"],
+			"description": "key-value pairs mapping paths in the game's directory to paths in the repository relative to the manifest file.",
+			"propertyNames": {
+				"format": "uri"
+			},
+			"additionalProperties": {
+				"type": "string",
+				"format": "uri"
+			},
+			"$comment": "Optional"
 		},
 
 		"manual_install_only": {

@@ -1,0 +1,59 @@
+name: Publish to Cloudflare R2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Build 'build' folder
+        run: |
+          docker compose run --rm builder
+
+      - name: Sanity check before we accidentally nuke the bucket
+        run: |
+          if [ -z "$(ls -A build/)" ]; then
+            echo "Build directory is empty, aborting."
+            exit 1
+          fi
+
+      - name: Update CA certificates and OpenSSL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates openssl
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Configure rclone for R2
+        run: |
+          mkdir -p ~/.config/rclone
+          cat > ~/.config/rclone/rclone.conf <<EOF
+          [r2]
+          type = s3
+          provider = Cloudflare
+          access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com/bar-workshop
+          region = auto
+          EOF
+
+      - name: Upload build/ to Cloudflare R2 with rclone
+        run: |
+          rclone sync build r2:${{ secrets.R2_BUCKET }}/ --fast-list --retries 0 --low-level-retries 0 --delete-during

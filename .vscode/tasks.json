@@ -1,0 +1,22 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "docker compose build builder && docker compose run --rm builder",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "push image",
+            "type": "shell",
+            "command": "docker push ghcr.io/wybrenkoelmans/bar-workshop-builder:latest",
+            "problemMatcher": []
+        }
+    ]
+}

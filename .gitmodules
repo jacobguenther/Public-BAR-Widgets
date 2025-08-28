@@ -6,4 +6,4 @@
 	url = https://github.com/chmod777-tester/widget1
 [submodule "Widgets/BAR-Widgets"]
 	path = Widgets/BAR-Widgets
-	url = git@github.com:WybrenKoelmans/BAR-Widgets.git
+	url = https://github.com/WybrenKoelmans/BAR-Widgets

@@ -44,6 +44,7 @@ def parse_submodules(submodules_source):
 				"url": url,
 			}
 	return submodules
+
 def parse_submodule_status(submoules, cmd_output):
 	lines = cmd_output.splitlines()
 	for line in lines:
@@ -56,84 +57,94 @@ def parse_submodule_status(submoules, cmd_output):
 			else:
 				raise Exception(f"Submodule path {path} found in status but not in .gitmodules")
 
+def find_manifests():
+	manifests = []
+	for root, dirs, files in os.walk("Widgets"):
+		if "manifest.json" in files:
+			manifests.append(os.path.join(root, "manifest.json"))
+	return manifests
+
 def main():
-	widget_metadata_schema_src, message = read_file("widget_metadata_schema.json")
-	if not widget_metadata_schema_src:
+	manifest_paths = find_manifests()
+	print(manifest_paths)
+
+	manifest_schema_src, message = read_file("widget_manifest_schema.json")
+	if not manifest_schema_src:
 		raise Exception(message)
-	widget_metadata_schema_json, message = parse_json(widget_metadata_schema_src)
-	if not widget_metadata_schema_json:
+	manifest_schema, message = parse_json(manifest_schema_src)
+	if not manifest_schema:
 		raise Exception(message)
 
-	metadata = []
-	for file in os.listdir("widget_metadata"):
-		widget_metadata_path = "widget_metadata/"+file
-		widget_metadata_src, message = read_file(widget_metadata_path)
-		if not widget_metadata_src:
+	manifests = []
+	for manifest_path in manifest_paths:
+		manifest_src, message = read_file(manifest_path)
+		if not manifest_src:
 			raise Exception(message)
 
-		widget_metadata_json, message = parse_json(widget_metadata_src)
-		if not widget_metadata_json:
+		manifest_json, message = parse_json(manifest_src)
+		if not manifest_json:
 			raise Exception(message)
 
-		is_valid, message = validate_json(widget_metadata_json, widget_metadata_schema_json)
+		is_valid, message = validate_json(manifest_json, manifest_schema)
 		if not is_valid:
 			raise Exception(message)
 		else:
-			print(f"SUCCESS: {widget_metadata_path} is valid according to the schema")
+			print(f"SUCCESS: {manifest_path} is valid according to the schema")
 
-		metadata.append(widget_metadata_json)
+		manifests.append(manifest_json)
 
 
-	submodules_source, message = read_file(".gitmodules")
-	if not submodules_source:
-		raise Exception(message)
-	
-	submodules = parse_submodules(submodules_source)
-	result = subprocess.run(["git", "submodule", "status"], capture_output=True, text=True, check=True)
-	parse_submodule_status(submodules, result.stdout)
-
-	seen_display_names = set() # 2 entries can not have the same display name
-	seen_submodule_paths = {} # Could 2 entries use the same repo?
-	seen_cover_image_paths = {} # Could 2 entries use the same cover image?
-	for entry in metadata:
-		display_name = entry.get("display_name")
-		submodule_path = entry.get("submodule_path")
-		cover_image_path = entry.get("cover_image_path")
-		# discord_link = entry.get("discord_link")
-
-		if display_name in seen_display_names:
-			raise Exception(f"display name conflict: {display_name}")
-
-		if submodule_path in seen_submodule_paths:
-			raise Exception(f"submodule path conflict: {submodule_path} for {display_name} and {seen_submodule_paths[submodule_path]}")
-		if not os.path.isdir(submodule_path):
-			raise Exception(f"missing folder: {submodule_path} for {display_name}")
+	if False:
+		submodules_source, message = read_file(".gitmodules")
+		if not submodules_source:
+			raise Exception(message)
 		
-		if submodule_path in submodules:
-			entry["github_link"] = submodules.get(submodule_path).get("url")
-			entry["githash"] = submodules.get(submodule_path).get("githash")
+		submodules = parse_submodules(submodules_source)
+		result = subprocess.run(["git", "submodule", "status"], capture_output=True, text=True, check=True)
+		parse_submodule_status(submodules, result.stdout)
 
-		if cover_image_path:
-			if cover_image_path in seen_cover_image_paths:
-				raise Exception(f"cover image path conflict: {cover_image_path} for {display_name} and {seen_cover_image_paths[cover_image_path]}")
-			if not os.path.isfile(cover_image_path):
-				raise Exception(f"missing cover image file at: {cover_image_path} for {display_name}")
-			if os.path.getsize(cover_image_path) / (1024 * 1024) > MAX_COVER_IMAGE_SIZE_MB:
-				raise Exception(f"cover image is too large {cover_image_path} must be less than {MAX_COVER_IMAGE_SIZE_MB}")
+		seen_display_names = set() # 2 entries can not have the same display name
+		seen_submodule_paths = {} # Could 2 entries use the same repo?
+		seen_cover_image_paths = {} # Could 2 entries use the same cover image?
+		for entry in metadata:
+			display_name = entry.get("display_name")
+			submodule_path = entry.get("submodule_path")
+			cover_image_path = entry.get("cover_image_path")
+			# discord_link = entry.get("discord_link")
+
+			if display_name in seen_display_names:
+				raise Exception(f"display name conflict: {display_name}")
+
+			if submodule_path in seen_submodule_paths:
+				raise Exception(f"submodule path conflict: {submodule_path} for {display_name} and {seen_submodule_paths[submodule_path]}")
+			if not os.path.isdir(submodule_path):
+				raise Exception(f"missing folder: {submodule_path} for {display_name}")
+			
+			if submodule_path in submodules:
+				entry["github_link"] = submodules.get(submodule_path).get("url")
+				entry["githash"] = submodules.get(submodule_path).get("githash")
+
+			if cover_image_path:
+				if cover_image_path in seen_cover_image_paths:
+					raise Exception(f"cover image path conflict: {cover_image_path} for {display_name} and {seen_cover_image_paths[cover_image_path]}")
+				if not os.path.isfile(cover_image_path):
+					raise Exception(f"missing cover image file at: {cover_image_path} for {display_name}")
+				if os.path.getsize(cover_image_path) / (1024 * 1024) > MAX_COVER_IMAGE_SIZE_MB:
+					raise Exception(f"cover image is too large {cover_image_path} must be less than {MAX_COVER_IMAGE_SIZE_MB}")
+			
+			seen_display_names.add(display_name)
+			seen_submodule_paths[submodule_path] = display_name
+			seen_cover_image_paths[cover_image_path] = display_name
+
+		for submodule_path in submodules:
+			if submodule_path not in seen_submodule_paths:
+				raise Exception(f"orphaned submodule {submodule_path}")
 		
-		seen_display_names.add(display_name)
-		seen_submodule_paths[submodule_path] = display_name
-		seen_cover_image_paths[cover_image_path] = display_name
+		if "validate-only" not in sys.argv[1:]:
+			with open("widget_metadata.json", "w") as f:
+				json.dump(metadata, f, indent="\t")
 
-	for submodule_path in submodules:
-		if submodule_path not in seen_submodule_paths:
-			raise Exception(f"orphaned submodule {submodule_path}")
-	
-	if "validate-only" not in sys.argv[1:]:
-		with open("widget_metadata.json", "w") as f:
-			json.dump(metadata, f, indent="\t")
-
-	print("SUCCESS: widget_metadata.json has no conflicts or missing data")
+		print("SUCCESS: widget_metadata.json has no conflicts or missing data")
 
 if __name__ == "__main__":
 	main()

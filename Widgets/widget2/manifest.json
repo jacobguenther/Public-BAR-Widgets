@@ -1,8 +1,15 @@
 {
+	"id": "widget2",
+	"mod_type": "widget",
 	"display_name": "widget 2",
-	"author": "chmod777 tester",
-	"submodule_path": "Widgets/widget1",
-	"discord_link": "",
-	"description": "A short description",
-	"entry_point": "/"
+	"author": "widget2 author",
+	"description": "A short description of widget 2.",
+	"homepage_url": "https://discord.com/channels/549281623154229250",
+	"sourcecode_url": "https://github.com",
+	"date_created": "2025-08-28",
+	"version": "1.0.0",
+	"install": {
+		"/LuaUI/Widgets/": "widget2.lua"
+	},
+	"manual_install_only": true
 }

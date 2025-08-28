@@ -55,7 +55,7 @@
 		"entrypoint": {
 			"type": ["string"],
 			"description": "Path to either a .lua file or a folder in your repository relative to the manifest file. Default \"/\".",
-			"$comment": "Optional"
+			"$comment": "Optional will be used by the widgetHandler to enable/disable the widget."
 		},
 		"install": {
 			"type": ["object"],
